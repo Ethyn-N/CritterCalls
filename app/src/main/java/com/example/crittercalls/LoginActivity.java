@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginButton.setVisibility(View.INVISIBLE);
                 loginProgressBar.setVisibility(View.VISIBLE);
 
-                Toast.makeText(getApplicationContext(), "Button Clicked", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Button Clicked", Toast.LENGTH_LONG).show();
 
                 if(emailValue.isEmpty() || passwordValue.isEmpty()) {
                     loginButton.setVisibility(View.VISIBLE);
