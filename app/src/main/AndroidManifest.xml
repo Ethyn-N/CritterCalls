@@ -13,27 +13,30 @@
         android:theme="@style/Theme.CritterCalls"
         tools:targetApi="31">
         <activity
+            android:name=".UpdateUserProfile"
+            android:exported="false"
+            android:label="@string/title_activity_update_user_profile"
+            android:theme="@style/Theme.CritterCalls" />
+        <activity
+            android:name=".UserProfile"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
-            android:exported="false" >
-        </activity>
-
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.CritterCalls" >
-
+            android:theme="@style/Theme.CritterCalls">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>
