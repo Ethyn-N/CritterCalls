@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText userName, userEmail, userPassword, confirmPassword;
+    private EditText firstName, lastName, userEmail, userPassword, confirmPassword;
     private Button regBtn;
     private TextView loginLink;
     private Intent homeIntent;
@@ -23,7 +23,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        userName = findViewById(R.id.reg_name);
+        firstName = findViewById(R.id.reg_firstname);
+        lastName = findViewById(R.id.reg_lastname);
         userEmail = findViewById(R.id.reg_email);
         userPassword = findViewById(R.id.reg_password);
         confirmPassword = findViewById(R.id.reg_confirm_password);
@@ -40,16 +41,21 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void addListeners() {
         regBtn.setOnClickListener(v -> {
-            String name = userName.getText().toString();
+            String first = firstName.getText().toString();
+            String last = lastName.getText().toString();
             String email = userEmail.getText().toString();
             String password = userPassword.getText().toString();
             String confirmPass = confirmPassword.getText().toString();
 
-            if(name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPass.isEmpty()) {
+            if(first.isEmpty() || last.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPass.isEmpty()) {
                  showMessage("Invalid Inputs!");
             }
+            else if (!password.equals(confirmPass))
+            {
+                showMessage("Password does not match Confirm Password");
+            }
             else {
-                registerUser(name, email, password);
+                registerUser(first, last, email, password);
             }
         });
 
@@ -64,14 +70,15 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
-    private void registerUser(String name, String email, String password) {
+    private void registerUser(String first, String last, String email, String password) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
-                        // Redirect to main
+                        startActivity(homeIntent);
+                        finish();
                     }
                     else {
-//                          registerUser(name, email, password);
+//                        registerUser(name, email, password);
                         showMessage((task.getException().getMessage()));
                     }
                 });
