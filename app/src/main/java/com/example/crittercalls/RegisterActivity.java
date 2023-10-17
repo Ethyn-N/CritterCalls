@@ -106,6 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("lastName", last);
                         user.put("email", email);
                         user.put("password", password);
+                        user.put("utaID", "");
+                        user.put("profession", "");
 
                         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
