@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.media.Image;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class UserProfile extends AppCompatActivity {
 
     private String fname;
@@ -13,6 +15,7 @@ public class UserProfile extends AppCompatActivity {
     private Image photo;
     private int id;
     private String profession;
+    private FirebaseAuth auth;
 
     public UserProfile(String fname, String lname, String email, Image photo, int id, String profession)
     {
@@ -30,15 +33,17 @@ public class UserProfile extends AppCompatActivity {
         this.lname = lname;
     }
 
-    public void logout()
+    private void logout()
     {
-
+        auth.signOut();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        //this.email = findViewById(R.id.login_email);
     }
 
 
