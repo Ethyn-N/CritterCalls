@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/profile_btn"
+        android:id="@+id/redirect_profile_btn"
         android:layout_width="72dp"
         android:layout_height="69dp"
         android:layout_alignParentTop="true"
