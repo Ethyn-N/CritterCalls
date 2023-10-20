@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -29,7 +30,7 @@ import com.example.crittercalls.databinding.ActivityLoginBinding;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email, password;
-    private TextView registerLink;
+    private TextView registerLink, forgotPasswordLink;
     private ProgressBar loginProgressBar;
     private Button loginButton;
     private Intent homeIntent;
@@ -48,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         loginProgressBar.setVisibility(View.INVISIBLE);
 
         registerLink = findViewById(R.id.text_register);
+        forgotPasswordLink = findViewById(R.id.login_forgot_password);
 
         homeIntent = new Intent(this, MainActivity.class);
 
@@ -57,36 +59,33 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void addListeners() {
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        loginButton.setOnClickListener(v -> {
+            String emailValue = email.getText().toString();
+            String passwordValue = password.getText().toString();
 
-                String emailValue = email.getText().toString();
-                String passwordValue = password.getText().toString();
-
-                loginButton.setVisibility(View.INVISIBLE);
-                loginProgressBar.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.INVISIBLE);
+            loginProgressBar.setVisibility(View.VISIBLE);
 
 //                Toast.makeText(getApplicationContext(), "Button Clicked", Toast.LENGTH_LONG).show();
 
-                if(emailValue.isEmpty() || passwordValue.isEmpty()) {
-                    loginButton.setVisibility(View.VISIBLE);
-                    loginProgressBar.setVisibility(View.INVISIBLE);
-                    showMessage("Invalid Email or Password Value!");
-                }
-                else {
-                    login(emailValue, passwordValue);
-                }
+            if(emailValue.isEmpty() || passwordValue.isEmpty()) {
+                loginButton.setVisibility(View.VISIBLE);
+                loginProgressBar.setVisibility(View.INVISIBLE);
+                showMessage("Invalid Email or Password Value!");
+            }
+            else {
+                login(emailValue, passwordValue);
             }
         });
 
-        registerLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent redirectToRegister = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(redirectToRegister);
-                finish();
-            }
+        registerLink.setOnClickListener(v -> {
+            Intent redirectToRegister = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(redirectToRegister);
+            finish();
+        });
+
+        forgotPasswordLink.setOnClickListener(v -> {
+
         });
     }
 
