@@ -2,17 +2,13 @@ package com.example.crittercalls;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
 
 public class UserProfile extends AppCompatActivity {
 
@@ -32,7 +28,7 @@ public class UserProfile extends AppCompatActivity {
         profession = findViewById(R.id.profile_profession);
         photo = findViewById(R.id.profile_img);
 
-        logout_button = findViewById(R.id.logout_btn);
+        logout_button = findViewById(R.id.profile_logout_btn);
         edit_acc_button = findViewById(R.id.profile_edit_account_link);
 
         auth = FirebaseAuth.getInstance();

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -95,10 +96,21 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
+    private void sendVerificationEmail() {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        user.sendEmailVerification().addOnSuccessListener(unused -> {
+            showMessage("Verification email has been sent.");
+        }).addOnFailureListener(e -> {
+            showMessage(e.getMessage());
+        });
+    }
+
     private void registerUser(String first, String last, String email, String password) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
+                        sendVerificationEmail();
+
                         userID = firebaseAuth.getCurrentUser().getUid();
                         DocumentReference documentReference = firestore.collection("users").document(userID);
                         Map<String, Object> user = new HashMap<>();
@@ -109,17 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("utaID", "");
                         user.put("profession", "");
 
-                        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d(TAG, "onSuccess: user Profile is created for " + userID);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG, "onFailure: " + e.toString());
-                            }
-                        });
+                        documentReference.set(user);
 
                         startActivity(homeIntent);
                         finish();
@@ -132,5 +134,6 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 }
