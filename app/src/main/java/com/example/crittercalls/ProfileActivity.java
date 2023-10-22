@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Button;
 
 import com.google.firebase.StartupTime;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 public class ProfileActivity extends AppCompatActivity {
     private TextView fullname, email, utaID, profession, editProfileLink;
     private ImageButton backButton;
+    private Button logout_btn;
     private ImageView profilePicture;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
@@ -33,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
         backButton = findViewById(R.id.profile_back_btn);
         profilePicture = findViewById(R.id.profile_img);
         editProfileLink = findViewById(R.id.profile_edit_account_link);
+        logout_btn = findViewById(R.id.logout_btn);
 
         fullname = findViewById(R.id.profile_name);
         email = findViewById(R.id.profile_email);
@@ -72,6 +75,13 @@ public class ProfileActivity extends AppCompatActivity {
         editProfileLink.setOnClickListener(v -> {
             Intent redirectToEditAccount = new Intent(getApplicationContext(), EditAccountActivity.class);
             startActivity((redirectToEditAccount));
+            finish();
+        });
+
+        logout_btn.setOnClickListener(v -> {
+            firebaseAuth.signOut();
+            Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(redirectToLogin);
             finish();
         });
 
