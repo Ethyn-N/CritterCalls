@@ -66,14 +66,11 @@ public class LoginActivity extends AppCompatActivity {
             loginButton.setVisibility(View.INVISIBLE);
             loginProgressBar.setVisibility(View.VISIBLE);
 
-//                Toast.makeText(getApplicationContext(), "Button Clicked", Toast.LENGTH_LONG).show();
-
-            if(emailValue.isEmpty() || passwordValue.isEmpty()) {
+            if (emailValue.isEmpty() || passwordValue.isEmpty()) {
                 loginButton.setVisibility(View.VISIBLE);
                 loginProgressBar.setVisibility(View.INVISIBLE);
                 showMessage("Invalid Email or Password Value!");
-            }
-            else {
+            } else {
                 login(emailValue, passwordValue);
             }
         });
@@ -85,7 +82,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         forgotPasswordLink.setOnClickListener(v -> {
-
+            Intent redirectToForgotPassword = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+            startActivity(redirectToForgotPassword);
+            finish();
         });
     }
 
@@ -98,14 +97,13 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             loginButton.setVisibility(View.VISIBLE);
                             loginProgressBar.setVisibility(View.INVISIBLE);
                             //Redirect to Main Screen
                             startActivity(homeIntent);
                             finish();
-                        }
-                        else {
+                        } else {
                             String errorMsg = task.getException().getMessage();
                             loginButton.setVisibility(View.VISIBLE);
                             loginProgressBar.setVisibility(View.INVISIBLE);
@@ -114,11 +112,4 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_login);
-//        return NavigationUI.navigateUp(navController, appBarConfiguration)
-//                || super.onSupportNavigateUp();
-//    }
 }
