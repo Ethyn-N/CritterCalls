@@ -61,20 +61,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
         classificationButton.setOnClickListener(v -> {
-            //Intent redirectToClassification = new Intent(getApplicationContext(), ClassificationActivity.class);
-            //startActivity(redirectToClassification);
+            Intent redirectToClassification = new Intent(getApplicationContext(), ClassificationActivity.class);
+            startActivity(redirectToClassification);
             finish();
         });
 
         modulesButton.setOnClickListener(v -> {
-           //Intent redirectToModules = new Intent(getApplicationContext(), ModuleActivity.class);
-           //startActivity(redirectToModules);
+           Intent redirectToModules = new Intent(getApplicationContext(), ModuleActivity.class);
+           startActivity(redirectToModules);
            finish();
         });
 
         statsButton.setOnClickListener(v -> {
-            //Intent redirectToStats = new Intent(getApplicationContext(), StatsActivity.class);
-            //startActivity(redirectToStats);
+            Intent redirectToStats = new Intent(getApplicationContext(), StatsActivity.class);
+            startActivity(redirectToStats);
             finish();
         });
     }
