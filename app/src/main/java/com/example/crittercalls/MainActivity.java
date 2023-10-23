@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 setProfilePic(getApplicationContext(), uri, profile_btn);
             }
         });
-
-
     }
 
     private void addListeners() {
