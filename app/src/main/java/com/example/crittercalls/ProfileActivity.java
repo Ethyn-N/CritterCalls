@@ -1,16 +1,24 @@
 package com.example.crittercalls;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.StartupTime;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -18,14 +26,20 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView fullname, email, utaID, profession, editProfileLink;
+    private String firstNameData, lastNameData, emailData, utaIDData, professionData;
     private ImageButton backButton;
     private Button logoutButton;
     private ImageView profilePicture;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
+    private StorageReference storageReference;
+
     private String userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +58,26 @@ public class ProfileActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+
 
         userID = firebaseAuth.getCurrentUser().getUid();
 
         addAccountInformation();
         addListeners();
+
+        StorageReference profileRef = storageReference.child("users/" + firebaseAuth.getUid() + "/profile.jpg");
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                setProfilePic(getApplicationContext(), uri, profilePicture);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showMessage(e.getMessage());
+            }
+        });
 
     }
 
@@ -61,6 +90,12 @@ public class ProfileActivity extends AppCompatActivity {
                 email.setText("Email: " + value.getString("email"));
                 utaID.setText("UTA ID: " + value.getString("utaID"));
                 profession.setText("Profession: " + value.getString("profession"));
+
+                firstNameData = value.getString("firstName");
+                lastNameData = value.getString("lastName");
+                emailData = value.getString("email");
+                utaIDData = value.getString("utaID");
+                professionData = value.getString("profession");
             }
         });
     }
@@ -74,17 +109,29 @@ public class ProfileActivity extends AppCompatActivity {
 
         editProfileLink.setOnClickListener(v -> {
             Intent redirectToEditAccount = new Intent(getApplicationContext(), EditAccountActivity.class);
+            redirectToEditAccount.putExtra("firstName", firstNameData);
+            redirectToEditAccount.putExtra("lastName", lastNameData);
+            redirectToEditAccount.putExtra("email", emailData);
+            redirectToEditAccount.putExtra("utaID", utaIDData);
+            redirectToEditAccount.putExtra("profession", professionData);
             startActivity((redirectToEditAccount));
             finish();
         });
 
         logoutButton.setOnClickListener(v -> {
-            firebaseAuth.signOut();
             Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(redirectToLogin);
             finish();
         });
 
+    }
+
+    private void showMessage(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    private static void setProfilePic(Context context, Uri imageURI, ImageView imageView) {
+        Glide.with(context).load(imageURI).apply(RequestOptions.circleCropTransform()).into(imageView);
     }
 
 }
