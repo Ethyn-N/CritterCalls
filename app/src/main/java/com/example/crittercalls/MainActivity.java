@@ -8,9 +8,15 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class MainActivity extends AppCompatActivity {
     private ImageButton profile_btn;
     private Button classificationButton, modulesButton, statsButton;
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,14 +28,11 @@ public class MainActivity extends AppCompatActivity {
         modulesButton = findViewById(R.id.btn_module_info);
         statsButton = findViewById(R.id.btn_statistics);
 
-        welcomeMessage();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+
         addListeners();
 
-
-    }
-
-    private void welcomeMessage()
-    {
 
     }
 
