@@ -1,5 +1,6 @@
 package com.example.crittercalls;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -49,7 +50,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         addAccountInformation();
         addListeners();
-
     }
 
     private void addAccountInformation() {
