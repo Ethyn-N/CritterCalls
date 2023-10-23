@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EditAccountActivity extends AppCompatActivity {
     private EditText firstName, lastName, email, utaID, profession;
@@ -70,6 +71,13 @@ public class EditAccountActivity extends AppCompatActivity {
         changeProfileImgLink.setOnClickListener(v -> {
             Intent openGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startForResult.launch(openGallery);
+        });
+
+        saveChangesButton.setOnClickListener(v -> {
+            //FirebaseAuth.getInstance().updateCurrentUser();
+            Intent redirectToProfile = new Intent(getApplicationContext(), ProfileActivity.class);
+            startActivity(redirectToProfile);
+            finish();
         });
     }
 
