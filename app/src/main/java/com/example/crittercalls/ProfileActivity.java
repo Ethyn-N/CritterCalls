@@ -72,13 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 setProfilePic(getApplicationContext(), uri, profilePicture);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                showMessage(e.getMessage());
-            }
         });
-
     }
 
     private void addAccountInformation() {

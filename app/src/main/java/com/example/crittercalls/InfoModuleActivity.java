@@ -4,18 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageButton;
 
-public class ClassificationActivity extends AppCompatActivity {
+public class InfoModuleActivity extends AppCompatActivity {
     private ImageButton backButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_classification);
+        setContentView(R.layout.activity_info_module);
 
-        backButton = findViewById(R.id.classification_back_btn);
+        backButton = findViewById(R.id.info_module_back_btn);
         addListeners();
     }
 

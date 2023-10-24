@@ -16,7 +16,7 @@
             android:name=".StatsActivity"
             android:exported="false" />
         <activity
-            android:name=".ModuleActivity"
+            android:name=".InfoModuleActivity"
             android:exported="false" />
         <activity
             android:name=".ClassificationActivity"

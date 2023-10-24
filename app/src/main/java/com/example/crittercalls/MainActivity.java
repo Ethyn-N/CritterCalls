@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +29,8 @@ import com.google.firebase.storage.StorageReference;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
-    private ImageButton profile_btn;
+    private ImageButton profileBtn;
+    private Button classBtn, infoBtn, statsBtn;
     private TextView welcome;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
@@ -40,8 +42,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        profile_btn = findViewById(R.id.redirect_profile_btn);
+        profileBtn = findViewById(R.id.redirect_profile_btn);
         welcome = findViewById(R.id.text_welcome);
+        classBtn = findViewById(R.id.btn_classification);
+        infoBtn = findViewById(R.id.btn_module_info);
+        statsBtn = findViewById(R.id.btn_statistics);
 
         addListeners();
 
@@ -58,15 +63,33 @@ public class MainActivity extends AppCompatActivity {
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                setProfilePic(getApplicationContext(), uri, profile_btn);
+                setProfilePic(getApplicationContext(), uri, profileBtn);
             }
         });
     }
 
     private void addListeners() {
-        profile_btn.setOnClickListener(v -> {
+        profileBtn.setOnClickListener(v -> {
             Intent redirectToProfile = new Intent(getApplicationContext(), ProfileActivity.class);
             startActivity(redirectToProfile);
+            finish();
+        });
+
+        classBtn.setOnClickListener(v -> {
+            Intent redirectToClassification = new Intent(getApplicationContext(), ClassificationActivity.class);
+            startActivity(redirectToClassification);
+            finish();
+        });
+
+        infoBtn.setOnClickListener(v -> {
+            Intent redirectToInfo = new Intent(getApplicationContext(), InfoModuleActivity.class);
+            startActivity(redirectToInfo);
+            finish();
+        });
+
+        statsBtn.setOnClickListener(v -> {
+            Intent redirectToStats = new Intent(getApplicationContext(), StatsActivity.class);
+            startActivity(redirectToStats);
             finish();
         });
     }

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StatsActivity">
+    tools:context=".InfoModuleActivity">
 
     <ImageButton
-        android:id="@+id/stats_back_btn"
+        android:id="@+id/info_module_back_btn"
         android:layout_width="53dp"
         android:layout_height="53dp"
         android:layout_marginStart="16dp"

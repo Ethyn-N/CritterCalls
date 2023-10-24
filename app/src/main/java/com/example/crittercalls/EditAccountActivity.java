@@ -116,12 +116,7 @@ public class EditAccountActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
 
         StorageReference profileRef = storageReference.child("users/" + firebaseAuth.getUid() + "/profile.jpg");
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                setProfilePic(getApplicationContext(), uri, profilePicture);
-            }
-        });
+        profileRef.getDownloadUrl().addOnSuccessListener(uri -> setProfilePic(getApplicationContext(), uri, profilePicture));
 
         addListeners();
         watchText(firstName);
@@ -140,12 +135,9 @@ public class EditAccountActivity extends AppCompatActivity {
 
         changeProfileImgLink.setOnClickListener(v -> {
             ImagePicker.with(this).cropSquare().compress(512).maxResultSize(512,512)
-                    .createIntent(new Function1<Intent, Unit>() {
-                        @Override
-                        public Unit invoke(Intent intent) {
-                            imagePickLauncher.launch(intent);
-                            return null;
-                        }
+                    .createIntent(intent -> {
+                        imagePickLauncher.launch(intent);
+                        return null;
                     });
         });
 
