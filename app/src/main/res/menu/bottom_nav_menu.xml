@@ -2,18 +2,18 @@
     <item
         android:id="@+id/menu_home"
         android:title="Home"
-        android:icon="@drawable/home_icon" />
+        android:icon="@drawable/home_account_icon" />
     <item
         android:id="@+id/menu_classification"
-        android:title="Classification"
+        android:title="Class"
         android:icon="@drawable/classification_icon" />
     <item
         android:id="@+id/menu_information_module"
-        android:title="Information Module"
-        android:icon="@drawable/info_icon" />
+        android:title="Module"
+        android:icon="@drawable/information_module_icon" />
     <item
         android:id="@+id/menu_statistics"
-        android:title="Statistics"
-        android:icon="@drawable/stats_icon" />
+        android:title="Stats"
+        android:icon="@drawable/statistics_icon" />
 </menu>
 
