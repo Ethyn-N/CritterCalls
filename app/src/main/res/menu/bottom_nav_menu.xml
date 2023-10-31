@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:title="Home"
+        android:icon="@drawable/home_icon" />
+    <item
+        android:id="@+id/menu_classification"
+        android:title="Classification"
+        android:icon="@drawable/classification_icon" />
+    <item
+        android:id="@+id/menu_information_module"
+        android:title="Information Module"
+        android:icon="@drawable/info_icon" />
+    <item
+        android:id="@+id/menu_statistics"
+        android:title="Statistics"
+        android:icon="@drawable/stats_icon" />
+</menu>
+
