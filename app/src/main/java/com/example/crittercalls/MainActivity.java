@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabItem;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton profileBtn;
     private Button classBtn, infoBtn, statsBtn;
     private TextView welcome;
+    private TabLayout tabLayout;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private StorageReference storageReference;
@@ -47,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
         classBtn = findViewById(R.id.btn_classification);
         infoBtn = findViewById(R.id.btn_module_info);
         statsBtn = findViewById(R.id.btn_statistics);
+
+        tabLayout = findViewById(R.id.tab_layout);
+        /*tabLayout.addTab(tabLayout.newTab().setText("Home"));
+        tabLayout.addTab(tabLayout.newTab().setText("Modules"));
+        tabLayout.addTab(tabLayout.newTab().setText("Modules"));*/
+
 
         addListeners();
 
