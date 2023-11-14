@@ -25,11 +25,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+//import com.google.firebase.firestore.FirebaseFirestoreException;
+//import com.google.firebase.ml.modeldownloader.CustomModel;
+//import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions;
+//import com.google.firebase.ml.modeldownloader.DownloadType;
+//import com.google.firebase.ml.modeldownloader.FirebaseModelDownloader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.tensorflow.lite.Interpreter;
 import org.w3c.dom.Text;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton profileBtn;
@@ -86,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         classBtn.setOnClickListener(v -> {
-            Intent redirectToClassification = new Intent(getApplicationContext(), ClassificationActivity.class);
+            Intent redirectToClassification = new Intent(getApplicationContext(), AudioHelperActivity.class);
             startActivity(redirectToClassification);
             finish();
         });
@@ -107,4 +114,26 @@ public class MainActivity extends AppCompatActivity {
     private static void setProfilePic(Context context, Uri imageURI, ImageView imageView) {
         Glide.with(context).load(imageURI).apply(RequestOptions.circleCropTransform()).into(imageView);
     }
+
+//    private void downloadCustomModel() {
+//        CustomModelDownloadConditions conditions = new CustomModelDownloadConditions.Builder()
+//                .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
+//                .build();
+//        FirebaseModelDownloader.getInstance()
+//                .getModel("Animal-Sound-Classifier", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, conditions)
+//                .addOnSuccessListener(new OnSuccessListener<CustomModel>() {
+//                    @Override
+//                    public void onSuccess(CustomModel model) {
+//                        // Download complete. Depending on your app, you could enable the ML
+//                        // feature, or switch from the local model to the remote model, etc.
+//
+//                        // The CustomModel object contains the local path of the model file,
+//                        // which you can use to instantiate a TensorFlow Lite interpreter.
+//                        File modelFile = model.getFile();
+//                        if (modelFile != null) {
+//                            Interpreter interpreter = new Interpreter(modelFile);
+//                        }
+//                    }
+//                });
+//    }
 }

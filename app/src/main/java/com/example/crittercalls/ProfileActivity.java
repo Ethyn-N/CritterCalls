@@ -2,9 +2,11 @@ package com.example.crittercalls;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -113,11 +115,26 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         logoutButton.setOnClickListener(v -> {
-            Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(redirectToLogin);
-            finish();
-        });
+            AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
 
+            builder.setTitle("Logout");
+            builder.setMessage("Are you sure you want to Logout?");
+            builder.setPositiveButton("Log Out", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(redirectToLogin);
+                    finish();
+                }
+            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog mDialog = builder.create();
+            mDialog.show();
+        });
     }
 
     private void showMessage(String text) {
