@@ -53,11 +53,12 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
 public class EditAccountActivity extends AppCompatActivity {
+    private ImageButton backButton;
+    private TextView title;
     private EditText firstName, lastName, email, utaID, profession;
     private TextView changeProfileImgLink;
     private ImageView profilePicture;
     private Uri selectedImageUri;
-    private ImageButton backButton;
     private Button saveChangesButton;
     private ProgressBar progressBar;
     private StorageReference storageReference;
@@ -82,6 +83,10 @@ public class EditAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
 
+        backButton = findViewById(R.id.back_btn);
+        title = findViewById(R.id.toolbar_title);
+        title.setText("Edit Account");
+
         firstName = findViewById(R.id.edit_firstname);
         lastName = findViewById(R.id.edit_lastname);
         email = findViewById(R.id.edit_email);
@@ -103,7 +108,6 @@ public class EditAccountActivity extends AppCompatActivity {
 
         changeProfileImgLink = findViewById(R.id.edit_profile_img_link);
         profilePicture = findViewById(R.id.edit_profile_img);
-        backButton = findViewById(R.id.edit_back_btn);
         saveChangesButton = findViewById(R.id.edit_save_changes_btn);
         progressBar = findViewById(R.id.edit_account_progress);
 

@@ -11,17 +11,9 @@
         android:layout_height="wrap_content"
         tools:context=".InfoModuleActivity">
 
-        <ImageButton
-            android:id="@+id/info_module_back_btn"
-            android:layout_width="53dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#03A9F4"
-            android:contentDescription="Back Button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/left_arrow" />
+        <include
+            android:id="@+id/toolbar_info_module"
+            layout="@layout/toolbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

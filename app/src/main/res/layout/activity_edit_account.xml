@@ -6,47 +6,86 @@
     android:layout_height="match_parent"
     tools:context=".EditAccountActivity">
 
+    <include
+        android:id="@+id/toolbar_edit_account"
+        layout="@layout/toolbar" />
+
     <ImageView
         android:id="@+id/edit_profile_img"
         android:layout_width="72dp"
         android:layout_height="69dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="88dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/user_icon_free" />
 
-    <TextView
-        android:id="@+id/edit_profile_img_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Profile Image"
-        android:textColor="#2196F3"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_profile_img" />
-
-    <ImageButton
-        android:id="@+id/edit_back_btn"
-        android:layout_width="53dp"
-        android:layout_height="53dp"
+    <EditText
+        android:id="@+id/edit_profession"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="#03A9F4"
-        android:contentDescription = "Back Button"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Profession"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/left_arrow" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_UTA_ID" />
+
+    <EditText
+        android:id="@+id/edit_email"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:autofillHints="emailAddress"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_lastname" />
+
+    <EditText
+        android:id="@+id/edit_UTA_ID"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="UTA ID"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_email"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/edit_lastname"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:autofillHints="name"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_firstname" />
 
     <EditText
         android:id="@+id/edit_firstname"
         android:layout_width="325dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="32dp"
         android:autofillHints="name"
         android:ems="10"
         android:hint="First Name"
@@ -56,63 +95,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_profile_img_link" />
 
-    <EditText
-        android:id="@+id/edit_email"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:autofillHints="emailAddress"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="text"
+    <TextView
+        android:id="@+id/edit_profile_img_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Change Profile Image"
+        android:textColor="#2196F3"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.119"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_lastname" />
-
-    <EditText
-        android:id="@+id/edit_profession"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="Profession"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.119"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_UTA_ID" />
-
-    <EditText
-        android:id="@+id/edit_lastname"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:autofillHints="name"
-        android:ems="10"
-        android:hint="Last Name"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.119"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_firstname" />
-
-    <EditText
-        android:id="@+id/edit_UTA_ID"
-        android:layout_width="325dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="UTA ID"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.119"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_email" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile_img" />
 
     <ProgressBar
         android:id="@+id/edit_account_progress"

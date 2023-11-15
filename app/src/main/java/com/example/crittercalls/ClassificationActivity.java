@@ -18,8 +18,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ClassificationActivity extends AppCompatActivity {
+public abstract class ClassificationActivity extends AppCompatActivity {
     private ImageButton backButton;
+    private TextView title;
     public final static int REQUEST_RECORD_AUDIO = 2033;
     protected TextView outputTextView;
     protected TextView specsTextView;
@@ -39,23 +40,19 @@ public class ClassificationActivity extends AppCompatActivity {
 
         stopRecordingButton.setEnabled(false);
 
-        if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
-        }
+//        if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
+//        }
 
-        backButton = findViewById(R.id.classification_back_btn);
+        backButton = findViewById(R.id.back_btn);
+        title = findViewById(R.id.toolbar_title);
+        title.setText("Animal Classification");
         addListeners();
     }
 
-    public void onStartRecording(View view) {
-        startRecordingButton.setEnabled(false);
-        stopRecordingButton.setEnabled(true);
-    }
+    public abstract void onStartRecording(View view);
 
-    public void onStopRecording(View view) {
-        startRecordingButton.setEnabled(true);
-        stopRecordingButton.setEnabled(false);
-    }
+    public abstract void onStopRecording(View view);
 
     private void addListeners() {
         backButton.setOnClickListener(v -> {

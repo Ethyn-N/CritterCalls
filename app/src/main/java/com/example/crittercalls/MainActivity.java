@@ -39,10 +39,11 @@ import org.w3c.dom.Text;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
-    private ImageButton profileBtn;
-    private Button classBtn, infoBtn, statsBtn;
+    private ImageButton backButton;
+    private TextView title;
+    private ImageButton profileBtn, classBtn;
+    private Button infoBtn, statsBtn;
     private TextView welcome;
-    private TabLayout tabLayout;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private StorageReference storageReference;
@@ -53,17 +54,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        backButton = findViewById(R.id.back_btn);
+        title = findViewById(R.id.toolbar_title);
+
+        backButton.setEnabled(false);
+        backButton.setVisibility(View.INVISIBLE);
+        title.setText("Critter Calls");
+
         profileBtn = findViewById(R.id.redirect_profile_btn);
         welcome = findViewById(R.id.text_welcome);
         classBtn = findViewById(R.id.btn_classification);
         infoBtn = findViewById(R.id.btn_module_info);
         statsBtn = findViewById(R.id.btn_statistics);
-
-        tabLayout = findViewById(R.id.tab_layout);
-        /*tabLayout.addTab(tabLayout.newTab().setText("Home"));
-        tabLayout.addTab(tabLayout.newTab().setText("Modules"));
-        tabLayout.addTab(tabLayout.newTab().setText("Modules"));*/
-
 
         addListeners();
 
@@ -115,25 +117,4 @@ public class MainActivity extends AppCompatActivity {
         Glide.with(context).load(imageURI).apply(RequestOptions.circleCropTransform()).into(imageView);
     }
 
-//    private void downloadCustomModel() {
-//        CustomModelDownloadConditions conditions = new CustomModelDownloadConditions.Builder()
-//                .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
-//                .build();
-//        FirebaseModelDownloader.getInstance()
-//                .getModel("Animal-Sound-Classifier", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, conditions)
-//                .addOnSuccessListener(new OnSuccessListener<CustomModel>() {
-//                    @Override
-//                    public void onSuccess(CustomModel model) {
-//                        // Download complete. Depending on your app, you could enable the ML
-//                        // feature, or switch from the local model to the remote model, etc.
-//
-//                        // The CustomModel object contains the local path of the model file,
-//                        // which you can use to instantiate a TensorFlow Lite interpreter.
-//                        File modelFile = model.getFile();
-//                        if (modelFile != null) {
-//                            Interpreter interpreter = new Interpreter(modelFile);
-//                        }
-//                    }
-//                });
-//    }
 }

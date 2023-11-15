@@ -33,9 +33,10 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
+    private ImageButton backButton;
+    private TextView title;
     private TextView fullname, email, utaID, profession, editProfileLink;
     private String firstNameData, lastNameData, emailData, utaIDData, professionData;
-    private ImageButton backButton;
     private Button logoutButton;
     private ImageView profilePicture;
     private FirebaseAuth firebaseAuth;
@@ -48,7 +49,10 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        backButton = findViewById(R.id.profile_back_btn);
+        backButton = findViewById(R.id.back_btn);
+        title = findViewById(R.id.toolbar_title);
+        title.setText("Profile");
+
         logoutButton = findViewById(R.id.profile_logout_btn);
         profilePicture = findViewById(R.id.profile_img);
         editProfileLink = findViewById(R.id.profile_edit_account_link);
