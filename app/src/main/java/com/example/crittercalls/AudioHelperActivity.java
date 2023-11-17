@@ -49,6 +49,7 @@ public class AudioHelperActivity extends ClassificationActivity {
     private static final float MINIMUM_DISPLAY_THRESHOLD = 0.3f;
     private AudioRecord audioRecord;
     private TensorAudio audioTensor;
+    private String[] animals = {"dog", "cat", "rooster", "pig", "cow", "frog", "hen", "insects", "sheep", "crow", "chirping_birds"};
     private int bufferSize;
     private short[] audioBuffer;
     private boolean isRecording = false;
@@ -210,16 +211,31 @@ public class AudioHelperActivity extends ClassificationActivity {
     private void classifyAudio() {
         audioTensor.load(audioRecord);
 
-//      Filtering out classifications with low probability
         List<Classifications> output = audioClassifier.classify(audioTensor);
+
+        // Filtering out classifications with low probability
         List<Category> finalOutput = new ArrayList<>();
         for (Classifications classifications : output) {
             for (Category category : classifications.getCategories()) {
                 if (category.getScore() > MINIMUM_DISPLAY_THRESHOLD) {
-                    finalOutput.add(category);
+                    for (String animal : animals) {
+                        if (category.getLabel().equals(animal)) {
+                            finalOutput.add(category);
+                        }
+                    }
                 }
             }
         }
+
+//        // Filtering out classifications with low probability
+//        List<Category> finalOutput = new ArrayList<>();
+//        for (Classifications classifications : output) {
+//            for (Category category : classifications.getCategories()) {
+//                if (category.getScore() > MINIMUM_DISPLAY_THRESHOLD) {
+//                    finalOutput.add(category);
+//                }
+//            }
+//        }
 
         // Sorting the results
         Collections.sort(finalOutput, (o1, o2) -> (int) (o1.getScore() - o2.getScore()));
