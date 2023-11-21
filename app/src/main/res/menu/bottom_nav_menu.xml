@@ -1,15 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_home"
-        android:title="Home"
-        android:icon="@drawable/home_account_icon" />
-    <item
         android:id="@+id/menu_classification"
         android:title="Class"
         android:icon="@drawable/classification_icon" />
     <item
-        android:id="@+id/menu_information_module"
-        android:title="Module"
+        android:id="@+id/menu_list"
+        android:title="List"
         android:icon="@drawable/information_module_icon" />
     <item
         android:id="@+id/menu_statistics"
