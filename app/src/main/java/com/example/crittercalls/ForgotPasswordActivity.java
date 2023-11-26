@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.SignInMethodQueryResult;
 
+import java.util.List;
+
 public class ForgotPasswordActivity extends AppCompatActivity {
     private EditText email;
     private Button resetPasswordButton;
@@ -44,12 +46,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void addListeners() {
         resetPasswordButton.setOnClickListener(v -> {
-            String emailValue = email.getText().toString();
-            if (!emailValue.isEmpty()) {
-                resetPassword(emailValue);
+            String emailValue = email.getText().toString().trim();
+            if (emailValue.isEmpty()) {
+                showMessage("Please fill the email field.");
             }
             else {
-                showMessage("Please fill the email field.");
+                resetPassword(emailValue);
             }
         });
 
@@ -65,19 +67,50 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         resetPasswordButton.setVisibility(View.INVISIBLE);
 
-        firebaseAuth.sendPasswordResetEmail(email)
-                .addOnSuccessListener(unused -> {
-                    showMessage("Reset Password link has been sent to email.");
-                    Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(redirectToLogin);
-                    finish();            })
-                .addOnFailureListener(e -> {
-                    showMessage(e.getMessage());
-                    progressBar.setVisibility(View.INVISIBLE);
-                    resetPasswordButton.setVisibility(View.VISIBLE);
-                });
+        // Check if the email is associated with a user in Firebase Authentication
+        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
+                .addOnCompleteListener(signInMethodsTask -> {
+                    if (signInMethodsTask.isSuccessful()) {
+                        List<String> signInMethods = signInMethodsTask.getResult().getSignInMethods();
 
+                        if (signInMethods != null && !signInMethods.isEmpty()) {
+                            // Email exists in the system, send the password reset email
+                            firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    showMessage("Reset Password link has been sent to email.");
+                                    Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                                    startActivity(redirectToLogin);
+                                    finish();
+                                } else {
+                                    showMessage(task.getException().getLocalizedMessage());
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    resetPasswordButton.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        } else {
+                            // Email not found in the system
+                            showMessage("Sorry, the provided email was not found in our system.");
+                            progressBar.setVisibility(View.INVISIBLE);
+                            resetPasswordButton.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        showMessage(signInMethodsTask.getException().getLocalizedMessage());
+                        progressBar.setVisibility(View.INVISIBLE);
+                        resetPasswordButton.setVisibility(View.VISIBLE);
+                    }
+                });
     }
+
+//                .addOnSuccessListener(unused -> {
+//                    showMessage("Reset Password link has been sent to email.");
+//                    Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
+//                    startActivity(redirectToLogin);
+//                    finish();            })
+//                .addOnFailureListener(e -> {
+//                    showMessage(e.getMessage());
+//                    progressBar.setVisibility(View.INVISIBLE);
+//                    resetPasswordButton.setVisibility(View.VISIBLE);
+//                });
 
     private void showMessage(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();

@@ -30,18 +30,19 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 import org.tensorflow.lite.task.audio.classifier.AudioClassifier;
 import org.tensorflow.lite.task.audio.classifier.Classifications;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class AudioHelperActivity extends ClassificationActivity {
-    float probabilityThreshold = 0.3f;
     private AudioClassifier audioClassifier;
-    private TensorAudio tensorAudio;
-    private TimerTask timerTask;
 
     private static final String MODEL_FILE = "yamnet_classification.tflite";
     private String[] permissions = {android.Manifest.permission.RECORD_AUDIO};
@@ -49,29 +50,17 @@ public class AudioHelperActivity extends ClassificationActivity {
     private static final float MINIMUM_DISPLAY_THRESHOLD = 0.3f;
     private AudioRecord audioRecord;
     private TensorAudio audioTensor;
-    private String[] animals = {"dog", "cat", "rooster", "pig", "cow", "frog", "hen", "insects", "sheep", "crow", "chirping_birds"};
-    private int bufferSize;
-    private short[] audioBuffer;
-    private boolean isRecording = false;
-    private Interpreter yamNetInterpreter;
-
-    private AudioClassifier mAudioClassifier;
-    private AudioRecord mAudioRecord;
-    private long classficationInterval = 500;       // 0.5 sec
-    private Handler mHandler;
-    private boolean permissionToRecordAccepted;
+    private String[] animals =
+            {"Dog", "Cat", "Bird", "Livestock, farm animals, working animals",
+            "Horse", "Cattle, bovinae", "Pig", "Goat", "Sheep", "Fowl", "Chicken, rooster",
+            "Turkey", "Duck", "Goose", "Roaring cats (lions, tigers)", "Pigeon, dove",
+            "Crow", "Owl", "Canidae, dogs, wolves", "Rodents, rats, mice", "Mouse",
+            "Insect", "Cricket", "Mosquito", "Fly, housefly", "Bee, wasp, etc.", "Frog", "Snake",
+                    "Whale vocalization"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        HandlerThread handlerThread = new HandlerThread("backgroundThread");
-//        handlerThread.start();
-//        mHandler = HandlerCompat.createAsync(handlerThread.getLooper());
-
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-//            requestPermissions(permissions, REQUEST_RECORD_AUDIO_PERMISSION);
-
 
         // Loading the model from the assets folder
         try {
@@ -81,7 +70,6 @@ public class AudioHelperActivity extends ClassificationActivity {
         }
 
         audioTensor = audioClassifier.createInputTensorAudio();
-
     }
     @Override
     public void onStartRecording(View view) {
@@ -182,7 +170,6 @@ public class AudioHelperActivity extends ClassificationActivity {
         // Start recording
         AudioRecord audioRecord = audioClassifier.createAudioRecord();
         audioRecord.startRecording();
-        isRecording = true;
         this.audioRecord = audioRecord;
     }
     @Override
@@ -195,17 +182,6 @@ public class AudioHelperActivity extends ClassificationActivity {
         classifyAudio();
 
         audioRecord.release();
-        isRecording = false;
-
-
-
-//        mHandler.removeCallbacksAndMessages(null);
-//        mAudioRecord.stop();
-//        mAudioRecord = null;
-//        mAudioClassifier = null;
-
-//        timerTask.cancel();
-//        audioRecord.stop();
     }
 
     private void classifyAudio() {
@@ -213,18 +189,42 @@ public class AudioHelperActivity extends ClassificationActivity {
 
         List<Classifications> output = audioClassifier.classify(audioTensor);
 
-        // Filtering out classifications with low probability
-        List<Category> finalOutput = new ArrayList<>();
+//        // Filtering out classifications with low probability
+//        List<Category> finalOutput = new ArrayList<>();
+//        for (Classifications classifications : output) {
+//            for (Category category : classifications.getCategories()) {
+//                if (category.getScore() > MINIMUM_DISPLAY_THRESHOLD) {
+//                    for (String animal : animals) {
+//                        if (category.getLabel().equals(animal)) {
+//                            finalOutput.add(category);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
+        Category highestProbabilityCategory = null;
+        float highestProbability = 0;
+
+        // Finding the category with the highest probability
         for (Classifications classifications : output) {
             for (Category category : classifications.getCategories()) {
-                if (category.getScore() > MINIMUM_DISPLAY_THRESHOLD) {
-                    for (String animal : animals) {
-                        if (category.getLabel().equals(animal)) {
-                            finalOutput.add(category);
+                for (String animal : animals) {
+                    if (category.getLabel().equals(animal)) {
+                        float currentProbability = category.getScore();
+                        if (currentProbability > highestProbability) {
+                            highestProbability = currentProbability;
+                            highestProbabilityCategory = category;
                         }
                     }
                 }
             }
+        }
+
+        // Filtering out classifications with low probability
+        List<Category> finalOutput = new ArrayList<>();
+        if (highestProbabilityCategory != null && highestProbability > MINIMUM_DISPLAY_THRESHOLD) {
+            finalOutput.add(highestProbabilityCategory);
         }
 
 //        // Filtering out classifications with low probability
@@ -264,18 +264,15 @@ public class AudioHelperActivity extends ClassificationActivity {
 //                outputTextView.setText("Could not classify");
 //        }
     }
-
     private boolean checkAudioPermission() {
         // Check if the permission has been granted
         return ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED;
     }
-
     private void requestAudioPermission() {
         // Request audio recording permission
         requestPermissions(permissions, REQUEST_RECORD_AUDIO_PERMISSION);
     }
-
     // Handle the result of the permission request
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -300,7 +297,6 @@ public class AudioHelperActivity extends ClassificationActivity {
             }
         }
     }
-
     private void showAppSettingsRedirect() {
         new AlertDialog.Builder(this)
                 .setTitle("Allow Permissions")
@@ -315,7 +311,6 @@ public class AudioHelperActivity extends ClassificationActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
     private void showPermissionExplanationDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Permission Needed")
@@ -330,8 +325,6 @@ public class AudioHelperActivity extends ClassificationActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
-
     private void openAppSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);

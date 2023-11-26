@@ -15,6 +15,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters.add("armeabi-v7a")
+            abiFilters.add("arm64-v8a")
+            abiFilters.add("x86")
+            abiFilters.add("x86_64")
+        }
     }
 
     buildTypes {
@@ -33,7 +40,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
+
 
 dependencies {
 
@@ -64,12 +73,10 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.8")
 
     implementation("org.tensorflow:tensorflow-lite-task-audio:0.4.4")
-    implementation("org.tensorflow:tensorflow-lite:2.14.0")
+    implementation("org.tensorflow:tensorflow-lite:2.11.0")
 
     implementation("org.tensorflow:tensorflow-lite-support:0.3.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.google.android.material:material:1.10.0")
-
-
-
+    implementation("com.chaquo.python:gradle:14.0.2")
 }
