@@ -1,24 +1,16 @@
 package com.example.crittercalls;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.AudioRecord;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,14 +18,20 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.crittercalls.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.tensorflow.lite.support.label.Category;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class ClassificationActivity extends AppCompatActivity {
     private ImageButton backButton;
     private TextView title;
     private ActivityMainBinding binding;
     private BottomNavigationView bottomNavigationView;
     public final static int REQUEST_RECORD_AUDIO = 2033;
+    protected ImageView animalImage;
+    protected List<String> resultsList = new ArrayList<>();
     protected TextView outputTextView;
-    protected TextView specsTextView;
     protected Button startRecordingButton;
     protected Button stopRecordingButton;
 
@@ -48,8 +46,10 @@ public abstract class ClassificationActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.menu_classification);
 
+        animalImage = findViewById(R.id.animalView);
+        animalImage.setVisibility(View.VISIBLE);
         outputTextView = findViewById(R.id.textViewOutput);
-        specsTextView = findViewById(R.id.textViewSpec);
+
         startRecordingButton = findViewById(R.id.buttonStartRecording);
         stopRecordingButton = findViewById(R.id.buttonStopRecording);
 

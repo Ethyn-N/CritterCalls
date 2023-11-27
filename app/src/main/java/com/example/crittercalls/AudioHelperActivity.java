@@ -23,6 +23,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.HandlerCompat;
 
+import com.squareup.picasso.Picasso;
+
 import org.tensorflow.lite.Interpreter;
 import org.tensorflow.lite.support.audio.TensorAudio;
 import org.tensorflow.lite.support.label.Category;
@@ -36,7 +38,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,6 +54,7 @@ public class AudioHelperActivity extends ClassificationActivity {
     private static final float MINIMUM_DISPLAY_THRESHOLD = 0.3f;
     private AudioRecord audioRecord;
     private TensorAudio audioTensor;
+    private Map<String, Integer> categoryPictureMap;
     private String[] animals =
             {"Dog", "Cat", "Bird", "Livestock, farm animals, working animals",
             "Horse", "Cattle, bovinae", "Pig", "Goat", "Sheep", "Fowl", "Chicken, rooster",
@@ -61,6 +66,8 @@ public class AudioHelperActivity extends ClassificationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initializeCategoryPictureMap();
 
         // Loading the model from the assets folder
         try {
@@ -223,7 +230,9 @@ public class AudioHelperActivity extends ClassificationActivity {
 
         // Filtering out classifications with low probability
         List<Category> finalOutput = new ArrayList<>();
-        if (highestProbabilityCategory != null && highestProbability > MINIMUM_DISPLAY_THRESHOLD) {
+        if (highestProbability > MINIMUM_DISPLAY_THRESHOLD) {
+            int pictureResourceId = getPictureResourceId(highestProbabilityCategory.getLabel());
+            Picasso.get().load(pictureResourceId).into(animalImage);
             finalOutput.add(highestProbabilityCategory);
         }
 
@@ -240,16 +249,33 @@ public class AudioHelperActivity extends ClassificationActivity {
         // Sorting the results
         Collections.sort(finalOutput, (o1, o2) -> (int) (o1.getScore() - o2.getScore()));
 
-        // Creating a multiline string with the filtered results
+//        // Creating a multiline string with the filtered results
+//        StringBuilder outputStr = new StringBuilder();
+//        for (Category category : finalOutput) {
+//            outputStr.append(category.getLabel())
+//                    .append(": ").append(category.getScore()).append("\n");
+//        }
+
         StringBuilder outputStr = new StringBuilder();
-        for (Category category : finalOutput) {
-            outputStr.append(category.getLabel())
-                    .append(": ").append(category.getScore()).append("\n");
+        if (!finalOutput.isEmpty()) {
+            Category firstCategory = finalOutput.get(0);
+            outputStr.append(firstCategory.getLabel())
+                    .append(": ").append(firstCategory.getScore());
         }
 
         if (finalOutput.isEmpty()) {
             outputTextView.setText("Could not classify");
+            Picasso.get().load(getPictureResourceId("Nothing")).into(animalImage);
         } else {
+            resultsList.add(outputStr.toString());
+
+//            // Display the numbered list in outputTextView
+//            StringBuilder numberedList = new StringBuilder();
+//            for (int i = 0; i < resultsList.size(); i++) {
+//                numberedList.append((i + 1)).append(". ").append(resultsList.get(i)).append("\n");
+//            }
+
+//            outputTextView.setText(numberedList.toString());
             outputTextView.setText(outputStr.toString());
         }
 
@@ -263,6 +289,29 @@ public class AudioHelperActivity extends ClassificationActivity {
 //            else
 //                outputTextView.setText("Could not classify");
 //        }
+    }
+    private void initializeCategoryPictureMap() {
+        categoryPictureMap = new HashMap<>();
+        categoryPictureMap.put("Cat", R.drawable.cat);
+        categoryPictureMap.put("Dog", R.drawable.dog);
+        categoryPictureMap.put("Nothing", R.drawable.confused);
+        // Add more mappings as needed
+    }
+    private int getPictureResourceId(String categoryLabel) {
+        // Make sure the map is initialized
+        if (categoryPictureMap == null) {
+            initializeCategoryPictureMap();
+        }
+
+        // Get the corresponding picture resource ID from the map
+        Integer pictureResourceId = categoryPictureMap.get(categoryLabel);
+
+        // If the label is not found in the map, provide a default picture resource ID
+        if (pictureResourceId == null) {
+            pictureResourceId = R.drawable.default_picture;
+        }
+
+        return pictureResourceId;
     }
     private boolean checkAudioPermission() {
         // Check if the permission has been granted

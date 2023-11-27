@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton backButton;
     private TextView title;
     private ImageButton profileBtn, classBtn;
-    private Button infoBtn, statsBtn;
+    private Button infoBtn;
     private TextView welcome;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         welcome = findViewById(R.id.text_welcome);
         classBtn = findViewById(R.id.btn_classification);
         infoBtn = findViewById(R.id.btn_module_info);
-        statsBtn = findViewById(R.id.btn_statistics);
 
         addListeners();
 
@@ -103,12 +102,6 @@ public class MainActivity extends AppCompatActivity {
         infoBtn.setOnClickListener(v -> {
             Intent redirectToInfo = new Intent(getApplicationContext(), InfoModuleActivity.class);
             startActivity(redirectToInfo);
-            finish();
-        });
-
-        statsBtn.setOnClickListener(v -> {
-            Intent redirectToStats = new Intent(getApplicationContext(), StatsActivity.class);
-            startActivity(redirectToStats);
             finish();
         });
     }
