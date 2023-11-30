@@ -79,4 +79,5 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.google.android.material:material:1.10.0")
     implementation("com.chaquo.python:gradle:14.0.2")
+    implementation("com.google.code.gson:gson:2.8.9")
 }
