@@ -5,33 +5,49 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioFormat;
 import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.provider.Settings;
-import android.util.Pair;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.os.HandlerCompat;
 
 import com.squareup.picasso.Picasso;
 
+import org.tensorflow.lite.Interpreter;
 import org.tensorflow.lite.support.audio.TensorAudio;
 import org.tensorflow.lite.support.label.Category;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 import org.tensorflow.lite.task.audio.classifier.AudioClassifier;
 import org.tensorflow.lite.task.audio.classifier.Classifications;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AudioHelperActivity extends ClassificationActivity {
     private AudioClassifier audioClassifier;
+
     private static final String MODEL_FILE = "yamnet_classification.tflite";
     private String[] permissions = {android.Manifest.permission.RECORD_AUDIO};
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -76,7 +92,87 @@ public class AudioHelperActivity extends ClassificationActivity {
             showMessage("Requesting Permissions");
         }
 
+//        if(mAudioClassifier != null) return;
+//
+//        try {
+//            AudioClassifier classifier = AudioClassifier.createFromFile(this, MODEL_FILE);
+//            TensorAudio audioTensor = classifier.createInputTensorAudio();
+//
+//            AudioRecord record = classifier.createAudioRecord();
+//            record.startRecording();
+//
+//            Runnable run = new Runnable() {
+//                @Override
+//                public void run() {
+//                    audioTensor.load(record);
+//                    List<Classifications> output = classifier.classify(audioTensor);
+//                    List<Category> filterModelOutput = output.get(0).getCategories();
+//                    for(Category c : filterModelOutput) {
+//                        if (c.getScore() > MINIMUM_DISPLAY_THRESHOLD)
+//                            outputTextView.setText(" label : " + c.getLabel() + " score : " + c.getScore());
+////                            Log.d("tensorAudio_java", " label : " + c.getLabel() + " score : " + c.getScore());
+//                    }
+//
+//                    mHandler.postDelayed(this,classficationInterval);
+//                }
+//            };
+//
+//            mHandler.post(run);
+//            mAudioClassifier = classifier;
+//            mAudioRecord = record;
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
+
+//        // showing the audio recorder specification
+//        TensorAudio.TensorAudioFormat format = audioClassifier.getRequiredTensorAudioFormat();
+//        String specs = "Number of channels: " + format.getChannels() + "\n"
+//                + "Sample Rate: " + format.getSampleRate();
+//        specsTextView.setText(specs);
+//
+//        // Creating and start recording
+//        audioRecord = audioClassifier.createAudioRecord();
+//        audioRecord.startRecording();
+//        timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                // Classifying audio data
+//                List<Classifications> output = audioClassifier.classify(tensorAudio);
+//
+//                // Filtering out classifications with low probability
+//                List<Category> finalOutput = new ArrayList<>();
+//                for (Classifications classifications : output) {
+//                    for (Category category : classifications.getCategories()) {
+//                        if (category.getScore() > probabilityThreshold) {
+//                            finalOutput.add(category);
+//                        }
+//                    }
+//                }
+//                // Sorting the results
+//                Collections.sort(finalOutput, (o1, o2) -> (int) (o1.getScore() - o2.getScore()));
+//
+//                // Creating a multiline string with the filtered results
+//                StringBuilder outputStr = new StringBuilder();
+//                for (Category category : finalOutput) {
+//                    outputStr.append(category.getLabel())
+//                            .append(": ").append(category.getScore()).append("\n");
+//                }
+//                // Updating the UI
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (finalOutput.isEmpty()) {
+//                            outputTextView.setText("Could not classify");
+//                        } else {
+//                            outputTextView.setText(outputStr.toString());
+//                        }
+//                    }
+//                });
+//            }
+//        };
+//        new Timer().scheduleAtFixedRate(timerTask, 1, 500);
     }
+
     private void startRecording() {
         // Start recording
         AudioRecord audioRecord = audioClassifier.createAudioRecord();
@@ -100,80 +196,132 @@ public class AudioHelperActivity extends ClassificationActivity {
 
         List<Classifications> output = audioClassifier.classify(audioTensor);
 
-        // Filtering out classifications with low probability
-        List<Category> finalOutput = new ArrayList<>();
-        for (Classifications classifications : output) {
-            for (Category category : classifications.getCategories()) {
-                if (category.getScore() > MINIMUM_DISPLAY_THRESHOLD) {
-                    finalOutput.add(category);
-                }
-            }
-        }
+//        // Filtering out classifications with low probability
+//        List<Category> finalOutput = new ArrayList<>();
+//        for (Classifications classifications : output) {
+//            for (Category category : classifications.getCategories()) {
+//                if (category.getScore() > MINIMUM_DISPLAY_THRESHOLD) {
+//                    for (String animal : animals) {
+//                        if (category.getLabel().equals(animal)) {
+//                            finalOutput.add(category);
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         Category highestProbabilityCategory = null;
         float highestProbability = 0;
 
         // Finding the category with the highest probability
-        for (Category category : finalOutput) {
-            for (String animal : animals) {
-                if (category.getLabel().equals(animal)) {
-                    float currentProbability = category.getScore();
-                    if (currentProbability > highestProbability) {
-                        highestProbability = currentProbability;
-                        highestProbabilityCategory = category;
+        for (Classifications classifications : output) {
+            for (Category category : classifications.getCategories()) {
+                for (String animal : animals) {
+                    if (category.getLabel().equals(animal)) {
+                        float currentProbability = category.getScore();
+                        if (currentProbability > highestProbability) {
+                            highestProbability = currentProbability;
+                            highestProbabilityCategory = category;
+                        }
                     }
                 }
             }
         }
 
-        // If highestProbability found, at it to the animalOutput
-        List<Category> animalOutput = new ArrayList<>();
+        // Filtering out classifications with low probability
+        List<Category> finalOutput = new ArrayList<>();
         if (highestProbability > MINIMUM_DISPLAY_THRESHOLD) {
-            animalOutput.add(highestProbabilityCategory);
+            int pictureResourceId = getPictureResourceId(highestProbabilityCategory.getLabel());
+            Picasso.get().load(pictureResourceId).into(animalImage);
+            finalOutput.add(highestProbabilityCategory);
         }
+
+//        // Filtering out classifications with low probability
+//        List<Category> finalOutput = new ArrayList<>();
+//        for (Classifications classifications : output) {
+//            for (Category category : classifications.getCategories()) {
+//                if (category.getScore() > MINIMUM_DISPLAY_THRESHOLD) {
+//                    finalOutput.add(category);
+//                }
+//            }
+//        }
 
         // Sorting the results
         Collections.sort(finalOutput, (o1, o2) -> (int) (o1.getScore() - o2.getScore()));
 
-        // Send the finalOutput statistics to the statistics fragment
-        statisticsList = finalOutput;
+//        // Creating a multiline string with the filtered results
+//        StringBuilder outputStr = new StringBuilder();
+//        for (Category category : finalOutput) {
+//            outputStr.append(category.getLabel())
+//                    .append(": ").append(category.getScore()).append("\n");
+//        }
 
-        // Get resultsList data and current count
-        Pair<ArrayList<String>, Integer> data = getResultsListAndCounterFromSharedPreferences();
-        if (data != null) {
-            resultsList = data.first;
-            counter = data.second;
-        }
-
-        // Format the animalOutput to an outputStr
         StringBuilder outputStr = new StringBuilder();
-        if (!animalOutput.isEmpty()) {
-            Category firstCategory = animalOutput.get(0);
+        if (!finalOutput.isEmpty()) {
+            Category firstCategory = finalOutput.get(0);
             outputStr.append(firstCategory.getLabel())
                     .append(": ").append(firstCategory.getScore());
-            outputStr.insert(0, counter + ". ");
-            counter++;
         }
 
-        if (animalOutput.isEmpty()) {
+        if (finalOutput.isEmpty()) {
             outputTextView.setText("Could not classify");
             Picasso.get().load(getPictureResourceId("Nothing")).into(animalImage);
         } else {
             resultsList.add(outputStr.toString());
-            int pictureResourceId = getPictureResourceId(highestProbabilityCategory.getLabel());
-            Picasso.get().load(pictureResourceId).into(animalImage);
+
+//            // Display the numbered list in outputTextView
+//            StringBuilder numberedList = new StringBuilder();
+//            for (int i = 0; i < resultsList.size(); i++) {
+//                numberedList.append((i + 1)).append(". ").append(resultsList.get(i)).append("\n");
+//            }
+
+//            outputTextView.setText(numberedList.toString());
             outputTextView.setText(outputStr.toString());
         }
 
-        //Save resultsList and counter to SharedPreferences
-        saveResultsListAndCounterToSharedPreferences(resultsList, counter);
+
+
+//        List<Classifications> output = audioClassifier.classify(audioTensor);
+//        List<Category> filterModelOutput = output.get(0).getCategories();
+//        for(Category c : filterModelOutput) {
+//            if (c.getScore() > MINIMUM_DISPLAY_THRESHOLD)
+//                outputTextView.setText(" label : " + c.getLabel() + " score : " + c.getScore());
+//            else
+//                outputTextView.setText("Could not classify");
+//        }
     }
     private void initializeCategoryPictureMap() {
         categoryPictureMap = new HashMap<>();
         categoryPictureMap.put("Cat", R.drawable.cat);
         categoryPictureMap.put("Dog", R.drawable.dog);
-        categoryPictureMap.put("Nothing", R.drawable.confused);
+        categoryPictureMap.put("Bird", R.drawable.bird);
+        categoryPictureMap.put("Livestock, farm animals, working animals", R.drawable.livestock);
+        categoryPictureMap.put("Horse", R.drawable.horse);
+        categoryPictureMap.put("Cattle, bovinae", R.drawable.cow);
         categoryPictureMap.put("Pig", R.drawable.pig);
+        categoryPictureMap.put("Goat", R.drawable.goat);
+        categoryPictureMap.put("Sheep", R.drawable.sheep);
+        categoryPictureMap.put("Fowl", R.drawable.fowl);
+        categoryPictureMap.put("Chicken, rooster", R.drawable.chicken);
+        categoryPictureMap.put("Turkey", R.drawable.turkey);
+        categoryPictureMap.put("Duck", R.drawable.duck);
+        categoryPictureMap.put("Goose", R.drawable.goose);
+        categoryPictureMap.put("Roaring cats (lions, tigers)", R.drawable.bigcat);
+        categoryPictureMap.put("Pigeon, dove", R.drawable.pigeon);
+        categoryPictureMap.put("Crow", R.drawable.crow);
+        categoryPictureMap.put("Owl", R.drawable.owl);
+        categoryPictureMap.put("Canidae, dogs, wolves", R.drawable.wolf);
+        categoryPictureMap.put("Rodents, rats, mice", R.drawable.rodent);
+        categoryPictureMap.put("Mouse", R.drawable.mouse);
+        categoryPictureMap.put("Insect", R.drawable.insect);
+        categoryPictureMap.put("Cricket", R.drawable.cricket);
+        categoryPictureMap.put("Mosquito", R.drawable.mosquito);
+        categoryPictureMap.put("Fly, housefly", R.drawable.fly);
+        categoryPictureMap.put("Bee, wasp, etc.", R.drawable.bee);
+        categoryPictureMap.put("Frog", R.drawable.frog);
+        categoryPictureMap.put("Snake", R.drawable.snake);
+        categoryPictureMap.put("Whale vocalization", R.drawable.whale);
+        categoryPictureMap.put("Nothing", R.drawable.confused);
         // Add more mappings as needed
     }
     private int getPictureResourceId(String categoryLabel) {
@@ -208,7 +356,7 @@ public class AudioHelperActivity extends ClassificationActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, proceed with audio recording logic
+                // Permission granted, proceed with your audio recording logic
                 startRecordingButton.setEnabled(false);
                 stopRecordingButton.setEnabled(true);
                 startRecording();
@@ -260,7 +408,7 @@ public class AudioHelperActivity extends ClassificationActivity {
 
         ActivityCompat.startActivityForResult(this, intent, REQUEST_RECORD_AUDIO, null);
     }
-    protected void onDestroy() {
-        super.onDestroy();
+    private void showMessage(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 }
