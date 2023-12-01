@@ -187,7 +187,32 @@ public class AudioHelperActivity extends ClassificationActivity {
         categoryPictureMap.put("Dog", R.drawable.dog);
         categoryPictureMap.put("Nothing", R.drawable.confused);
         categoryPictureMap.put("Pig", R.drawable.pig);
-        // Add more mappings as needed
+        categoryPictureMap.put("Bird", R.drawable.bird);
+        categoryPictureMap.put("Livestock, farm animals, working animals", R.drawable.livestock);
+        categoryPictureMap.put("Horse", R.drawable.horse);
+        categoryPictureMap.put("Cattle, bovinae", R.drawable.cow);
+        categoryPictureMap.put("Goat", R.drawable.goat);
+        categoryPictureMap.put("Sheep", R.drawable.sheep);
+        categoryPictureMap.put("Fowl", R.drawable.fowl);
+        categoryPictureMap.put("Chicken, rooster", R.drawable.chicken);
+        categoryPictureMap.put("Turkey", R.drawable.turkey);
+        categoryPictureMap.put("Duck", R.drawable.duck);
+        categoryPictureMap.put("Goose", R.drawable.goose);
+        categoryPictureMap.put("Roaring cats (lions, tigers)", R.drawable.bigcat);
+        categoryPictureMap.put("Pigeon, dove", R.drawable.pigeon);
+        categoryPictureMap.put("Crow", R.drawable.crow);
+        categoryPictureMap.put("Owl", R.drawable.owl);
+        categoryPictureMap.put("Canidae, dogs, wolves", R.drawable.wolf);
+        categoryPictureMap.put("Rodents, rats, mice", R.drawable.rodent);
+        categoryPictureMap.put("Mouse", R.drawable.mouse);
+        categoryPictureMap.put("Insect", R.drawable.insect);
+        categoryPictureMap.put("Cricket", R.drawable.cricket);
+        categoryPictureMap.put("Mosquito", R.drawable.mosquito);
+        categoryPictureMap.put("Fly, housefly", R.drawable.fly);
+        categoryPictureMap.put("Bee, wasp, etc.", R.drawable.bee);
+        categoryPictureMap.put("Frog", R.drawable.frog);
+        categoryPictureMap.put("Snake", R.drawable.snake);
+        categoryPictureMap.put("Whale vocalization", R.drawable.whale);
     }
     private int getPictureResourceId(String categoryLabel) {
         // Make sure the map is initialized
