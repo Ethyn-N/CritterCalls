@@ -120,6 +120,8 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("password", password);
                         user.put("utaID", "");
                         user.put("profession", "");
+                        user.put("resultsList", "");
+                        user.put("counter", 1);
 
                         documentReference.set(user);
 

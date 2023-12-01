@@ -148,6 +148,7 @@ public class StatsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             xAxis.setDrawAxisLine(true);
             xAxis.setGranularity(1f);
+            xAxis.setTextSize(12f);
 
             List<Integer> barColors = generateRandomColors(categoryLabels.size()); // Generate a list of random colors
             BarDataSet dataSet = new BarDataSet(getEntries(categoryScores), "Probability");
@@ -158,9 +159,9 @@ public class StatsFragment extends Fragment {
 
             // Adjust the axis scale and granularity
             barChart.getAxisRight().setEnabled(false);
-            barChart.getAxisLeft().setAxisMinimum(0f);  // Set the minimum value of the y-axis
+            barChart.getAxisLeft().setAxisMinimum(0f);
             barChart.getAxisLeft().setAxisMaximum(1.1f);
-            barChart.getAxisLeft().setGranularity(0.1f);   // Set the granularity of the y-axis
+            barChart.getAxisLeft().setGranularity(0.1f);
 
             Legend legend = barChart.getLegend();
             legend.setEnabled(false);

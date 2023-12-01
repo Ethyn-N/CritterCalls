@@ -138,12 +138,13 @@ public class AudioHelperActivity extends ClassificationActivity {
         // Send the finalOutput statistics to the statistics fragment
         statisticsList = finalOutput;
 
-        // Get resultsList data and current count
-        Pair<ArrayList<String>, Integer> data = getResultsListAndCounterFromSharedPreferences();
-        if (data != null) {
-            resultsList = data.first;
-            counter = data.second;
-        }
+//        // Get resultsList data and current count
+//        Pair<ArrayList<String>, Integer> data = getResultsListAndCounterFromSharedPreferences();
+//        if (data != null) {
+//            resultsList = data.first;
+//            counter = data.second;
+//        }
+        loadResultsListAndCountFromFirebase();
 
         // Format the animalOutput to an outputStr
         StringBuilder outputStr = new StringBuilder();
@@ -155,8 +156,19 @@ public class AudioHelperActivity extends ClassificationActivity {
             counter++;
         }
 
+//        // Format the animalOutput to an outputStr
+//        StringBuilder outputStr = new StringBuilder();
+//        if (!finalOutput.isEmpty()) {
+//            Category firstCategory = finalOutput.get(0);
+//            outputStr.append(firstCategory.getLabel())
+//                    .append(": ").append(firstCategory.getScore());
+//            outputStr.insert(0, counter + ". ");
+//            counter++;
+//        }
+
         if (animalOutput.isEmpty()) {
             outputTextView.setText("Could not classify");
+//            resultsList.add(outputStr.toString());
             Picasso.get().load(getPictureResourceId("Nothing")).into(animalImage);
         } else {
             resultsList.add(outputStr.toString());
@@ -166,7 +178,8 @@ public class AudioHelperActivity extends ClassificationActivity {
         }
 
         //Save resultsList and counter to SharedPreferences
-        saveResultsListAndCounterToSharedPreferences(resultsList, counter);
+//        saveResultsListAndCounterToSharedPreferences(resultsList, counter);
+        saveResultsListAndCounterToFirebase();
     }
     private void initializeCategoryPictureMap() {
         categoryPictureMap = new HashMap<>();
