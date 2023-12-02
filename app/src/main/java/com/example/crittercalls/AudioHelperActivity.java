@@ -66,7 +66,7 @@ public class AudioHelperActivity extends ClassificationActivity {
     public void onStartRecording(View view) {
         // Check for audio recording permissions
         if (checkAudioPermission()) {
-            // Permission is already granted, proceed with your audio recording logic
+            // Permission is already granted, proceed with audio recording logic
             startRecordingButton.setEnabled(false);
             stopRecordingButton.setEnabled(true);
             startRecording();
@@ -75,7 +75,6 @@ public class AudioHelperActivity extends ClassificationActivity {
             requestAudioPermission();
             showMessage("Requesting Permissions");
         }
-
     }
     private void startRecording() {
         // Start recording
@@ -90,6 +89,8 @@ public class AudioHelperActivity extends ClassificationActivity {
 
         // Stop recording and release resources
         audioRecord.stop();
+
+        // Start classification logic
         classifyAudio();
 
         audioRecord.release();
@@ -138,12 +139,7 @@ public class AudioHelperActivity extends ClassificationActivity {
         // Send the finalOutput statistics to the statistics fragment
         statisticsList = finalOutput;
 
-//        // Get resultsList data and current count
-//        Pair<ArrayList<String>, Integer> data = getResultsListAndCounterFromSharedPreferences();
-//        if (data != null) {
-//            resultsList = data.first;
-//            counter = data.second;
-//        }
+        // Initialize resultsList and counter
         loadResultsListAndCountFromFirebase();
 
         // Format the animalOutput to an outputStr
@@ -156,19 +152,10 @@ public class AudioHelperActivity extends ClassificationActivity {
             counter++;
         }
 
-//        // Format the animalOutput to an outputStr
-//        StringBuilder outputStr = new StringBuilder();
-//        if (!finalOutput.isEmpty()) {
-//            Category firstCategory = finalOutput.get(0);
-//            outputStr.append(firstCategory.getLabel())
-//                    .append(": ").append(firstCategory.getScore());
-//            outputStr.insert(0, counter + ". ");
-//            counter++;
-//        }
-
+        // If animal class could not be found, output "Could not classify".
+        // Else, output the animal class result with its picture and add it to the resultsList.
         if (animalOutput.isEmpty()) {
             outputTextView.setText("Could not classify");
-//            resultsList.add(outputStr.toString());
             Picasso.get().load(getPictureResourceId("Nothing")).into(animalImage);
         } else {
             resultsList.add(outputStr.toString());
@@ -177,15 +164,14 @@ public class AudioHelperActivity extends ClassificationActivity {
             outputTextView.setText(outputStr.toString());
         }
 
-        //Save resultsList and counter to SharedPreferences
-//        saveResultsListAndCounterToSharedPreferences(resultsList, counter);
+        // Save resultsList and counter to Firebase
         saveResultsListAndCounterToFirebase();
     }
     private void initializeCategoryPictureMap() {
         categoryPictureMap = new HashMap<>();
+        categoryPictureMap.put("Nothing", R.drawable.confused);
         categoryPictureMap.put("Cat", R.drawable.cat);
         categoryPictureMap.put("Dog", R.drawable.dog);
-        categoryPictureMap.put("Nothing", R.drawable.confused);
         categoryPictureMap.put("Pig", R.drawable.pig);
         categoryPictureMap.put("Bird", R.drawable.bird);
         categoryPictureMap.put("Livestock, farm animals, working animals", R.drawable.livestock);
@@ -239,7 +225,6 @@ public class AudioHelperActivity extends ClassificationActivity {
         // Request audio recording permission
         requestPermissions(permissions, REQUEST_RECORD_AUDIO_PERMISSION);
     }
-    // Handle the result of the permission request
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {

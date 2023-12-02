@@ -17,7 +17,7 @@ public class InfoModuleActivity extends AppCompatActivity {
 
         backButton = findViewById(R.id.back_btn);
         title = findViewById(R.id.toolbar_title);
-        title.setText("Machine Learning Information");
+        title.setText("YAMNet Summary Model");
         title.setTextSize(20);
 
         addListeners();

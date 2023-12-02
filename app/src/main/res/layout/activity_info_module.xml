@@ -11,36 +11,16 @@
         android:layout_height="wrap_content"
         tools:context=".InfoModuleActivity">
 
-        <ImageButton
-            android:id="@+id/info_module_back_btn"
-            android:layout_width="53dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#03A9F4"
-            android:contentDescription="Back Button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/left_arrow" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="sans-serif-smallcaps"
-            android:text="YAMNet Summary Model"
-            android:textSize="36sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/info_module_back_btn" />
+        <include
+            android:id="@+id/toolbar_info"
+            layout="@layout/toolbar" />
 
 
         <TextView
-            android:id="@+id/test_text"
+            android:id="@+id/summary_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:fontFamily="sans-serif"
             android:padding="16dp"
             android:text="YAMNet\n
             YAMNet is an audio event classifier that takes audio waveform as input and makes predictions for 521 audio events from the AudioSet ontology. The model is using MobileNet v1 architecture and was trained using the AudioSet collection. The model was originally made with TensorFlow Model Garden, a model using Keras API and model weights to help construct the model.\n\n
@@ -52,11 +32,10 @@ Capabilities\n
             Its capabilities include a stand-alone audio event classifier that provides a guideline across multiple audio events. It also includes a high-level feature extractor using a 1024-D embedding output of YAMNet. This extractor can be used to train another shallow model on a small amount of data for a certain task. This allows specified audio classifiers to exist without requiring large amounts of labeled data and without having to train models end-to-end.\n\n
 Limitations\n
             There are some limitations to the YAMNet model which include not being able to directly treat outputs as probabilities. Sometimes, a calibration test and fine-tuning may be needed using task-specific data which then allows particular classes to be scaled."
-            android:fontFamily="sans-serif"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/info_module_back_btn" />
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_info" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

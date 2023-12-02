@@ -148,12 +148,13 @@ public class StatsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             xAxis.setDrawAxisLine(true);
             xAxis.setGranularity(1f);
-            xAxis.setTextSize(12f);
 
             List<Integer> barColors = generateRandomColors(categoryLabels.size()); // Generate a list of random colors
             BarDataSet dataSet = new BarDataSet(getEntries(categoryScores), "Probability");
             dataSet.setColors(barColors); // Set the colors for each bar
             BarData barData = new BarData(dataSet);
+
+            barData.setBarWidth(0.4f);
 
             barChart.setData(barData);
 
