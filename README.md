@@ -47,7 +47,7 @@ Welcome to the Critter Calls Android App! This application allows you to classif
 
 - If you encounter any issues with the app, make sure your device or emulator has the necessary audio permissions.
 - Ensure that the microphone is functional and properly connected to the device.
-- **Ensure a stable internet connection during usage of the app as the framework is based off of Firebase.**
+- Ensure a stable internet connection during usage of the app as the framework is based off of Firebase.
 
 ## Note
 
