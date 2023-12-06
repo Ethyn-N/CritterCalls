@@ -8,7 +8,7 @@ Welcome to the Critter Calls Android App! This application allows you to classif
 
 - Android Studio installed on your machine.
 - A physical Android device with a microphone for optimal performance or an emulator with a microphone enabled.
-- **Internet connection for the initial setup overall app usage**
+- **Internet connection for the initial setup and overall app usage**
 
 ## Getting Started
 
@@ -64,7 +64,7 @@ Welcome to the Critter Calls Android App! This application allows you to classif
    - If not already logged in after registering, use the registered or test account credentials to log in to the application. You can log in again using the same credentials.
 
 4. **Record and Analyze:**
-   - Navigate to the "Record" section of the app.
+   - Navigate to the "Sound Classification" section of the app.
    - Start recording an animal sound using the app's built-in recording feature.
 
 5. **Grant Audio Permissions:**
