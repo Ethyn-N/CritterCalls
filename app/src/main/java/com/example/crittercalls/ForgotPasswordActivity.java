@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.SignInMethodQueryResult;
 
 import java.util.List;
@@ -68,36 +69,50 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         resetPasswordButton.setVisibility(View.INVISIBLE);
 
         // Check if the email is associated with a user in Firebase Authentication
-        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
-                .addOnCompleteListener(signInMethodsTask -> {
-                    if (signInMethodsTask.isSuccessful()) {
-                        List<String> signInMethods = signInMethodsTask.getResult().getSignInMethods();
+//        firebaseAuth.fetchSignInMethodsForEmail(email)
+//                .addOnCompleteListener(signInMethodsTask -> {
+//                    if (signInMethodsTask.isSuccessful()) {
+//                        List<String> signInMethods = signInMethodsTask.getResult().getSignInMethods();
+//
+//                        if (signInMethods != null) {
+//                            if (!signInMethods.isEmpty()) {
+//                                // Email exists in the system, send the password reset email
+//                                firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+//                                    if (task.isSuccessful()) {
+//                                        showMessage("Reset Password link has been sent to email.");
+//                                        Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
+//                                        startActivity(redirectToLogin);
+//                                        finish();
+//                                    } else {
+//                                        showMessage(task.getException().getLocalizedMessage());
+//                                        progressBar.setVisibility(View.INVISIBLE);
+//                                        resetPasswordButton.setVisibility(View.VISIBLE);
+//                                    }
+//                                });
+//                            }
+//                        } else {
+//                            // Email not found in the system
+//                            showMessage("Sorry, the provided email was not found in our system.");
+//                            progressBar.setVisibility(View.INVISIBLE);
+//                            resetPasswordButton.setVisibility(View.VISIBLE);
+//                        }
+//                    } else {
+//                        showMessage(signInMethodsTask.getException().getLocalizedMessage());
+//                        progressBar.setVisibility(View.INVISIBLE);
+//                        resetPasswordButton.setVisibility(View.VISIBLE);
+//                    }
+//                });
 
-                        if (signInMethods != null && !signInMethods.isEmpty()) {
-                            // Email exists in the system, send the password reset email
-                            firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    showMessage("Reset Password link has been sent to email.");
-                                    Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
-                                    startActivity(redirectToLogin);
-                                    finish();
-                                } else {
-                                    showMessage(task.getException().getLocalizedMessage());
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    resetPasswordButton.setVisibility(View.VISIBLE);
-                                }
-                            });
-                        } else {
-                            // Email not found in the system
-                            showMessage("Sorry, the provided email was not found in our system.");
-                            progressBar.setVisibility(View.INVISIBLE);
-                            resetPasswordButton.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        showMessage(signInMethodsTask.getException().getLocalizedMessage());
-                        progressBar.setVisibility(View.INVISIBLE);
-                        resetPasswordButton.setVisibility(View.VISIBLE);
-                    }
+        firebaseAuth.sendPasswordResetEmail(email)
+                .addOnSuccessListener(unused -> {
+                    showMessage("Reset Password link has been sent to email.");
+                    Intent redirectToLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(redirectToLogin);
+                    finish();            })
+                .addOnFailureListener(e -> {
+                    showMessage(e.getMessage());
+                    progressBar.setVisibility(View.INVISIBLE);
+                    resetPasswordButton.setVisibility(View.VISIBLE);
                 });
     }
 

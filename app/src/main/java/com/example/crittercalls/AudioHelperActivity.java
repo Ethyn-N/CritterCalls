@@ -40,7 +40,7 @@ public class AudioHelperActivity extends ClassificationActivity {
     private TensorAudio audioTensor;
     private Map<String, Integer> categoryPictureMap;
     private String[] animals =
-            {"Dog", "Cat", "Bird", "Livestock, farm animals, working animals",
+            {"Dog", "Cat", "Bird",
             "Horse", "Cattle, bovinae", "Pig", "Goat", "Sheep", "Fowl", "Chicken, rooster",
             "Turkey", "Duck", "Goose", "Roaring cats (lions, tigers)", "Pigeon, dove",
             "Crow", "Owl", "Canidae, dogs, wolves", "Rodents, rats, mice", "Mouse",
@@ -174,7 +174,6 @@ public class AudioHelperActivity extends ClassificationActivity {
         categoryPictureMap.put("Dog", R.drawable.dog);
         categoryPictureMap.put("Pig", R.drawable.pig);
         categoryPictureMap.put("Bird", R.drawable.bird);
-        categoryPictureMap.put("Livestock, farm animals, working animals", R.drawable.livestock);
         categoryPictureMap.put("Horse", R.drawable.horse);
         categoryPictureMap.put("Cattle, bovinae", R.drawable.cow);
         categoryPictureMap.put("Goat", R.drawable.goat);
